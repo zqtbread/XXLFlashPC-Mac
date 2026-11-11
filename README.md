@@ -110,6 +110,16 @@ XXLFlashPC-Mac/
 
 从源码构建需要自备 Mac 版 PPAPI Flash 插件（本仓库不提供、不分发源码形式的二进制），详见 [docs/BUILD.md](docs/BUILD.md)。
 
+### 网络受限时同步代码
+
+若 `git push` 报 `CONNECT tunnel failed` / 502（`github.com` 被代理拦，但 `api.github.com` 可用），可以走 API 同步：
+
+```bash
+python3 scripts/sync_via_api.py
+```
+
+原理：按本地 git 索引重建完整 tree 与 commit，复刻 author / committer / message，使远端 commit 的 SHA 与本地 HEAD **完全一致**，之后本地仓库依旧干净、可继续提交。需要已安装并登录 `gh`、改动已 commit。也可用 `GITHUB_REPO=owner/repo` 覆盖目标仓库。
+
 ---
 
 ## 六、安全提醒
