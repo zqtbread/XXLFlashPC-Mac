@@ -2,6 +2,8 @@
 
 在 macOS 上**原生**打开 QQ 空间 PC 版开心消消乐（`appid 100718846`）的自包含浏览器壳。
 
+> **中文说明入口**：[使用说明.md](使用说明.md)（完整使用步骤）｜[随成品附带的 txt](docs/使用说明.txt)｜[排障手册](docs/TROUBLESHOOTING.md)｜[构建指南](docs/BUILD.md)。本仓库所有文档均为中文，这份 README 也是中文。Release 里的 `XXLFlashPC-Mac-README-zh.txt` 就是可单独下载的中文说明。
+
 不是 Ruffle 模拟，不是云游戏，不是手游 / H5 版，不是 QQ 游戏大厅，也不是远程桌面或虚拟机：它内置真正的 Adobe Flash PPAPI 播放器与最后一个支持它的 Chromium 内核，双击即用，登录态和全部依赖都装在 `.app` 里，拷到另一台 Intel Mac 也能直接用。
 
 > 本项目是个人兼容性与可移植性研究，供自用与技术参考。第三方二进制的版权归属、使用限制与下架联系方式见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
@@ -16,7 +18,7 @@
 3. 双击打开。首次会进入 QQ 官方登录页，用 QQ 号密码或手机 QQ 扫码登录。
 4. 菜单 **游戏 → 打开 QQ 空间游戏**，或直接等登录回跳。登录态保存在 `~/Library/Application Support/XXLFlashPC`，以后双击直接玩。
 
-详细操作、菜单说明和注意事项见 [docs/使用说明.txt](docs/使用说明.txt)。
+完整中文步骤见 [使用说明.md](使用说明.md)；随成品附带的纯文本版在 [docs/使用说明.txt](docs/使用说明.txt)。
 
 **如果游戏区域没出画面**：先点一下播放区中间的方块；仍不行就用菜单 **帮助 → 复制诊断信息**，把内容贴到 Issue 里。排障手册见 [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)。
 
@@ -91,6 +93,7 @@ allow-outdated-plugins / no-sandbox
 
 ```
 XXLFlashPC-Mac/
+├── 使用说明.md              # 给使用者的完整中文说明
 ├── app/                     # Electron 主程序
 │   ├── main.js              # 窗口、菜单、插件参数、禁更新三层、诊断
 │   ├── package.json
