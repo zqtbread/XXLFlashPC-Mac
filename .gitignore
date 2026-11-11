@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+__MACOSX/
+
+# 构建产物（体积大且含第三方二进制）
+build/
+dist/
+out/
+*.zip
+*.app/
+*.plugin/
+runtime/
+vendor/
+
+# 第三方运行时缓存
+electron-v*-darwin-*.zip
+*.tar.bz2
+*.tar.gz
+node_modules/
+
+# 日志与临时文件
+*.log
+*.tmp
+.capture/
+
+# Python
+__pycache__/
+*.pyc

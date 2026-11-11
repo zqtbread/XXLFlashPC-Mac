@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>Flash 自检</title>
+<style>
+  body{font:15px/1.7 -apple-system,"PingFang SC",sans-serif;background:#fff8ec;color:#3b2f22;margin:0;padding:32px 40px}
+  h1{font-size:22px;margin:0 0 6px}
+  .sub{color:#8a7360;margin-bottom:24px}
+  .card{background:#fff;border:1px solid #f0ddc4;border-radius:12px;padding:18px 22px;margin-bottom:16px}
+  .row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed #f2e6d6}
+  .row:last-child{border:0}
+  .k{color:#7a6550}.v{font-weight:600}
+  .ok{color:#1a8a4a}.bad{color:#c0392b}
+  #swfbox{margin-top:14px;background:#fff3dd;border-radius:10px;padding:14px;text-align:center}
+  .tip{background:#fff;border-left:4px solid #f0a644;padding:14px 18px;border-radius:6px;margin-top:18px}
+  code{background:#f6ecdd;padding:2px 6px;border-radius:4px;font-size:13px}
+</style></head><body>
+<h1>Flash 自检</h1>
+<div class="sub">这一页用来确认真正的 Adobe Flash 插件已经在这台 Mac 上工作。</div>
+<div class="card" id="result">检测中…</div>
+<div class="card">
+  <div style="font-weight:600;margin-bottom:8px">实际播放测试</div>
+  <div style="color:#7a6550">下面这块是 Flash 播放区域，出现淡蓝色底即表示插件已成功实例化。</div>
+  <div id="swfbox"><embed type="application/x-shockwave-flash" src="test.swf" width="320" height="180" allowScriptAccess="always" quality="high"></embed></div>
+</div>
+<div class="tip" id="next"></div>
+<script>
+(function(){
+  var f = navigator.plugins.namedItem('Shockwave Flash');
+  var list = [];
+  for (var i=0;i<navigator.plugins.length;i++) list.push(navigator.plugins[i].name);
+  var rows = [
+    ['浏览器内核', navigator.userAgent.match(/(Chrome\/[\d.]+)/) ? RegExp.$1 : '未知'],
+    ['Adobe Flash 插件', f ? (f.description || 'Shockwave Flash') : '未加载'],
+    ['Flash MIME 支持', navigator.mimeTypes['application/x-shockwave-flash'] ? '已注册' : '未注册'],
+    ['插件列表', list.join(' / ')]
+  ];
+  var ok = !!f && !!navigator.mimeTypes['application/x-shockwave-flash'];
+  var html = rows.map(function(r){
+    var cls = (r[0]==='Adobe Flash 插件'||r[0]==='Flash MIME 支持') ? (ok?'ok':'bad') : '';
+    return '<div class="row"><span class="k">'+r[0]+'</span><span class="v '+cls+'">'+r[1]+'</span></div>';
+  }).join('');
+  document.getElementById('result').innerHTML =
+    '<div class="row" style="border:0;padding-bottom:12px"><span class="k">总体状态</span><span class="v '+(ok?'ok':'bad')+'">'+(ok?'✅ 真 Flash 已就绪，可以玩 QQ 空间 PC 版':'❌ 插件未加载，请用菜单「帮助 → 复制诊断信息」反馈')+'</span></div>' + html;
+  document.getElementById('next').innerHTML = ok
+    ? '下一步：菜单 <code>游戏 → 打开 QQ 空间首页</code> 用手机 QQ 扫码登录，再点 <code>游戏 → 打开 QQ 空间游戏</code>。登录状态会自动保留，下次双击直接玩。'
+    : '如果这里显示失败，说明插件没被加载。请确认整个 App 是完整拷贝过来的（不要只拷快捷方式）。';
+})();
+</script>
+</body></html>

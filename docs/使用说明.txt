@@ -1,0 +1,97 @@
+开心消消乐 PC 版（QQ 空间）· Mac 专用
+==========================================
+
+这个文件对应的程序：开心消消乐PC版.app
+目标：在这台 Mac 上打开 QQ 空间那个 PC 版开心消消乐（appid 100718846）
+      不是手游版、不是云游戏版、不是 QQ 游戏大厅版。
+
+
+【怎么用】
+
+1. 双击「开心消消乐PC版.app」
+   （可以拖到程序坞；带这台电脑出门不需要另外带任何文件，
+     浏览器内核和 Flash 插件全部装在这个 app 里面）
+
+2. 打开后是 QQ 登录页
+   - 可以直接输 QQ 号 + 密码登录
+   - 或点页面上蓝色的「快捷登录」切换到手机 QQ 扫码
+   登录成功会自动跳回游戏页 https://game.qzone.qq.com/100718846
+
+3. 以后再双击，登录状态会保留（存在
+   ~/Library/Application Support/XXLFlashPC），不用每次扫码。
+
+
+【如果游戏区域没出画面】
+
+先点一下游戏区域中间的方块（Flash 插件有时会要一次点击确认）。
+如果还是不显示，点菜单栏「帮助 → 复制诊断信息」，把内容发我，
+我据此换插件或换内核继续修，不用你折腾。
+
+菜单栏还有：
+  游戏 → 打开 QQ 空间首页（重新登录）、打开完整分享链接（备用入口）
+  游戏 → 粘贴网址并打开（复制一条链接后点这个，⌘L）
+  设置 → 切换 Windows / Mac 浏览器标识（默认 Windows，和原版一致）
+  设置 → 清除登录状态并重启
+  帮助 → Flash 自检页（能看到插件是不是真的装上了）
+
+
+【关于「一加载完就弹更新」——已经彻底解决】
+
+你指出的这个现象定位到了：点那个「更新」会跳
+  https://www.flash.cn/flashupdate → /download-wins → /download
+这是中国特供版 Flash 34 的 Flash Center 强制更新锁。插件二进制里
+写着「自 2022 年 1 月 10 日起不得独立使用，必须升级到 Flash Center」。
+它不受 mms.cfg、不联网、不换浏览器内核影响，只能从插件本身破掉。
+
+已做的处理（三层，全部内置在这个 app 里，带走也生效）：
+  1. 给插件二进制打了 FlashPatch 的 OOD 补丁（和 Windows 那个
+     「Patched」包同一套补丁）：停用 OOD 检查父函数、把条件跳转
+     改成无条件跳转，共改 20 字节，然后 ad-hoc 重签。
+     实测：原来的「更新」占位消失，Flash 内容正常渲染出来。
+  2. app 每次启动自动写 ~/Library/Application Support/Macromedia/mms.cfg
+     （AutoUpdateDisable=1 / SilentAutoUpdateEnable=0 / uciServerOODXMLFlag=0
+      / uciOODBlockingDays=0 等全套禁更新键），拷到别的 Mac 也自动生效。
+  3. 网络与弹窗拦截：所有 flash.cn、adobefpl.com、geo2.adobe.com、
+     ood.xml / fppings / flashupdate 等更新检查请求一律取消；
+     任何想弹到 flash.cn 的新窗口或跳转也直接拦掉。
+     实测日志：[XXL] blocked update request: https://www.flash.cn/flashupdate
+
+
+【已经做到的 / 还没验证的】
+
+已实测通过：
+  - macOS 15.8.3 / Intel 上跑起真正的 Adobe Flash PPAPI 34.0.0.372
+    （不是 Ruffle 模拟），Chromium 87 里 Shockwave Flash 注册成功
+  - 「更新」占位消失，测试 SWF 的橙黄色画面正常渲染（真 Flash 出图）
+  - 更新域名请求被拦截、mms.cfg 自动写入、插件 ad-hoc 签名有效
+  - 打开游戏地址 → QQ 登录页完整加载、二维码/快捷登录都能拉起，
+    登录回跳地址就是 game.qzone.qq.com/100718846
+  - 整个 app 自包含、双击即开、独立登录目录、不改动系统
+
+只能你本人验证的：
+  - 扫码登录之后游戏页的表现（账号这一步我没法替你做）
+
+
+【安全提醒】
+
+这个 app 用的是 2020 年的 Chromium 87 + Flash（为了兼容老游戏只能如此），
+请只用它玩这个游戏，不要拿它上网银、邮箱或输入其他重要账号密码。
+QQ 登录请走官方登录页（本 app 打开的就是 ptlogin2.qq.com 官方页）。
+
+
+【技术构成】
+
+外壳：AppleScript 启动器（独立签名，双击即开）
+内核：Electron 11.5.0 / Chromium 87.0.4280.141（最后一个支持 PPAPI Flash 的分支）
+Flash：flash.plugin，34.0.0.372，Mach-O x86_64
+       已打 FlashPatch OOD / 证书时间检查补丁，ad-hoc 重签
+       （原版二进制备份：flashruntime/ppapi/PepperFlashPlayer.orig）
+启动参数：ppapi-flash-path / ppapi-flash-version / enable-system-flash=1 /
+         autoplay-policy=no-user-gesture-required /
+         override-plugin-power-saver-for-testing=never /
+         allow-outdated-plugins / no-sandbox
+         —— 后几项抄自 Windows 原版 CefFlashBrowser 的 InitCefFlash()
+禁更新：① 插件二进制 OOD 补丁 ② 启动自动写 mms.cfg
+        ③ webRequest + new-window/will-navigate 拦截更新域名
+独立配置：~/Library/Application Support/XXLFlashPC（登录态）
+         ~/Library/Application Support/Macromedia/mms.cfg（禁更新）
