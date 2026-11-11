@@ -10,8 +10,9 @@
 
 ## 一、快速开始
 
-1. 到 **Releases → v1.0.0** 下载 `开心消消乐PC版-Mac.zip`（约 85 MB）。
+1. 到 **Releases → v1.0.0** 下载 `XXLFlashPC-Mac-v1.0.0.zip`（约 85 MB）。
 2. 用 macOS 自带的「归档实用工具」解压（双击 zip 即可），得到 `开心消消乐PC版.app`。
+   （Release 附件用 ASCII 文件名，是因为 GitHub 会清洗中文附件名；解压出来的 `.app` 仍是中文名。）
 3. 双击打开。首次会进入 QQ 官方登录页，用 QQ 号密码或手机 QQ 扫码登录。
 4. 菜单 **游戏 → 打开 QQ 空间游戏**，或直接等登录回跳。登录态保存在 `~/Library/Application Support/XXLFlashPC`，以后双击直接玩。
 
